@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<!--Website metadata-->
+
+<head>
+  <!--Import stylesheet-->
+  <link rel="stylesheet" href="index.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CUT</title>
+  <link rel="icon" type="image/png" href="static/images/Favicon.png" />
+  <meta property="og:title" content="CUT" />
+  <meta property="og:description" content="ChromeOS Unenrollment Toolkit" />
+</head>
+<!--Main-->
+
+<body>
+  <!--What shows up first-->
+  <div class="Navigation">
+    <h3 class="terminal-input">$ cat project-info</h3>
+    <h1>CUT</h1>
+    <h3>ChromeOS Unenrollment Toolkit</h3>
+    <p>An Alpine miniroot-based RMA Shim boot disk for unenrollment</p>
+  </div>
+    <h3>Project goals:</h3>
+    <ul>
+      <li><strong>Small footprint</strong></li>
+        With a 30mb rootfs, it's approximately 10x smaller than the leading competitor, SH1MMER
+      <li><strong>Full payload support</strong></li>
+        Supports all meaningful payloads that come with SH1MMER, as well as improvements, such as the Pencil payload having the ability to remove FWMP
+      <li><strong>More sane UX</strong></li>
+        Sanity checking and UI consistency at the forefront
+      <li><strong>Documentation</strong></h4>
+        Includes extensive documentation on Chromebook hacking and how each payload works
+    </ul>  
+   
+  <h3 class="terminal-input">$ cat links</h3>
+  List of links related to the project
+  <ul>
+    <li><a href="">Downloads</a></li>
+    <li><a href="/docs/index.html">Documentation</a></li>
+    <li><a href="https://git.sr.ht/~error404nullnotfound/CUT">Source code</a></li>
+  </ul>
+
+  <!--Listing posts-->
+    <h3 class="terminal-input">$ cat index.html | grep "licensing"</h3>
+  <footer>
+    Made by <strong>ERROR-404-NULL-NOT-FOUND</strong> or
+    <strong>Rosa Green</strong> as a personal project. This website is
+    licensed under
+    <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GPL 3.0 or later</a>.
+  </footer>
+</body>
+</html>
