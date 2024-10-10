@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<!--Website metadata-->
+
+<head>
+<!--Import stylesheet-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/index.css" />
+<title>CUT docs: Kernel Versions</title>
+<link rel="icon" type="image/png" href="/Favicon.png" />
+<meta property="og:title" content="CUT docs: Kernel Versions" />
+<meta property="og:description" content="A description of kernel max rollback versions (kernvers) and the exploits available for them" />
+</head>
+
+<body>
+<a href="/index.html">home</a>
+<h3 class="terminal-input">$ cat docs/systems/kernver.txt</h3>
+<header>
+<h1>Kernel Versions</h1>
+<h3>A description of kernel max rollback versions (kernvers) and the exploits available for them</h3>
+</header>
+<main>
+
+<div class='section'>Section 1 - Technical overview</div>
+
+The kernel version rollback protection system, referred to as the kernver in the <div class='underline'>Firmware</div>, is a
+4-byte section of memory in the <div class='underline'>GSC</div> that is used to determine the minimum signed ChromeOS
+version that can be loaded. <div class='purple'>TL;DR it's Google's system to prevent downgrading to utilize critical
+exploits.</div>
+
+<div class='section'>Section 2 - Kernvers and exploits</div>
+
+The folowing is a list of kernel versions, their minimum downgrade version, and the associated exploits, respectively.
+If a ChromeOS version is prefaced with a 'v', the listed ChromeOS version is vulnurable to that exploit, as well as any
+below it. If an exploit is coloured red, then it's not publicly released.
+
+- KV0/KV1 -   Any ChromeOS version - <div class='underline'>Legacy Unenrollment</div>	(v110)
+- KV2     -   v112                 - <div class='underline'>Cryptosmite</div>		(v118)
+- KV3     -   v120                 - <div class='red'><div class='underline'>OlyBmmer</div></div>			(v125)
+- KV4     -   v126                 - <div class='red'><div class='underline'>Icarus</div></div>			(v129)
+- KV5     -   v130+                - <div class='underline'>CRSH2TTY</div>			(hasn't been patched)
+</main>
+<h3 class="terminal-input">$ find -name author</h3>
+<p>
+ERROR 404: NULL NOT FOUND <br />Programmer, transfemme, Linux user, FOSS
+believer
+</p>
+<!--Footer-->
+<h3 class="terminal-input">$ cat docs/systems/kernver.txt | grep "licensing"</h3>
+<footer>
+Documentation made by <strong>ERROR-404-NULL-NOT-FOUND</strong> or
+<strong>Rosa Green</strong> for the CUT project. This website is
+licensed under
+<a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GPL 3.0 or later</a
+>.
+</footer>
+</body>
+</html>
