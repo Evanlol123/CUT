@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<!--Website metadata-->
+
+<head>
+<!--Import stylesheet-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/index.css" />
+<title>CUT docs: Terminology</title>
+<link rel="icon" type="image/png" href="/Favicon.png" />
+<meta property="og:title" content="CUT docs: Terminology" />
+<meta property="og:description" content="A guide to common ChromeOS hacking systems and terminology" />
+</head>
+
+<body>
+<a href="/index.html">home</a>
+<h3 class="terminal-input">$ cat docs/systems/terminology.txt</h3>
+<header>
+<h1>Terminology</h1>
+<h3>A guide to common ChromeOS hacking systems and terminology</h3>
+</header>
+<main>
+<div class='section'>Section 1 - Basic systems</div>
+
+<div class='subsection'>Partition</div>
+
+A disk is separated into multiple parts, or partitions; each one usually contains a filesystem, but not always
+
+<div class='subsection'>AP</div> (Application Processor)
+
+The AP is the chip that stores the firmware, typically <div class='underline'>Coreboot</div>.
+- Loads and bootstraps the ChromeOS system
+- Separated into read-only (RO) and read-write (RW) sections; the GSC protects the RO section from being written to
+unless the <div class='underline'>Hardware WP</div> is disabled
+- The code on the chip and the chip itself are often reffered to interchangably as "AP"
+- On CR50 boards, the write-protection on the RO region cannot be disabled without hardware modification or
+<div class='underline'>CCD</div> (see <div class='underline'>Titan-C vs CR50 vs TI50</div>)
+
+<div class='subsection'>Coreboot</div>
+
+Coreboot is a Free and Open Source (FOSS) firmware platform that handles hardware initialization and executes specific
+payload; in the case of Chromebooks, this payload is almost always <div class='underline'>VBoot</div>.
+
+<div class='subsection'>VBoot</div> (Verified Boot)
+
+Coreboot payload that handles ChromeOS intial security checks and kernel loading.
+
+<div class='subsection'>Depthcharge</div>
+
+ChromeOS' bootloader
+- Stored in the RO firmware
+- Verifies and loads ChromeOS kernel images according to the configuration given and options passed.
+- The configuration in question is stored in an unknown format[1] on the kernel's partition.
+
+<div class='subsection'>Rootfs</div>
+
+- The actual system of ChromeOS; stores all executed programs
+- Read-only
+- Verified on boot by the <div class='underline'>GSC</div>
+- 2 partitions for ChromeOS' update scheme ROOT A is in use most of the time, but when the device updates, the update
+is written to ROOT B. When the device next restarts, it loads ROOT B, which then updates ROOT A This is all to
+facilitate a fairly seamless update experience, as well as providing failsafes.
+
+<div class='subsection'>Verified mode</div>
+
+Also known as normal boot mode
+- Depthcharge verifies all kernels loaded
+- If a kernel (or the <div class='underline'>rootfs</div> that kernel loads) fails verification, this mode displays the
+"ChromeOS is missing or damaged" screen
+
+<div class='subsection'>Recovery mode</div>
+
+- Used to restore critical ChromeOS system files in the event that a system becomes unbootable
+- In normal (verified) boot mode, <div class='underline'>recovery images</div> will fail on the verification step if their
+kernver is lower than the system's
+- Utilizes a chain of trust starting with <div class='underline'>Depthcharge</div> verifying the
+<div class='underline'>Kernel</div>, which then verifies the in-built <div class='underline'>ROOTFS </div>
+
+<div class='subsection'>Developer mode</div>
+
+- Permits booting of unsigned operating systems, taking TPM ownership, and writing to the
+<div class='underline'>firmware</div>
+- If <div class='underline'>FWMP</div> is set, this can only load recovery media FWMP being set is also known as "fake dev
+mode" (although this is a misnomer, see <div class='underline'>FWMP</div>) Throughout this guide, dev mode is assumed to
+mean that <div class='underline'>FWMP</div> is enabled, while NOFWMP dev mode means the opposite
+
+<div class='subsection'>Recovery image</div> (TODO)
+
+<div class='subsection'>Stateful</div>
+
+- Stores the <div class='underline'>Encstateful</div>
+- Largest partition on the disk
+- Stores various OS info
+
+<div class='subsection'>VPD</div> (Vital Product Data)
+
+- Stored in the RO section of the <div class='underline'>Firmware</div>
+- Stores data that uniquely identifies a device, as well as some flags such as block_devmode (note: these work in
+conjunction with FWMP)
+- Contains the serial number, MAC address, and
+
+<div class='subsection'>CCD</div> (Closed-Case Debug)
+
+A set of developer tools that can be utilized when <div class='underline'>FWMP</div> is not set, permitting various actions
+that would normally require hardware modification by using a specific USB-C cable. The main features are permitting
+for disabling <div class='underline'>AP</div> RO WP and updating the RW region of the CR50.
+
+<div class='section'>Section 2 - Security systems</div>
+
+<div class='subsection'>FWMP</div> (Firmware Management Parameters)
+
+- For the purposes of this documentation, <div class='underline'>FWMP</div> refers specifically to the block_devmode flag
+being set, as that's what almost everyone means when they say "FWMP is set"
+- Stored on the TPM
+- Dictates whether <div class='underline'>NOFWMP dev mode</div> can be loaded
+- Cannot be set while booted in <div class='underline'>Recovery mode</div> while <div class='underline'>Developer mode</div> is
+enabled; aka RMA shims
+
+<div class='subsection'>Kenver</div>
+
+Also known as kernel version
+- Google's response to downgrading
+- Depthcharge refuses to load any ChromeOS kernel in <div class='underline'>Verified boot mode</div> unless the
+DISABLE_FW_ROLLBACK_CHECK <div class='underline'>GBB</div> flag is set.
+
+<div class='subsection'>Encstateful</div> (encrypted stateful)
+
+- Main storage partition; any user-edited files are stored here
+- Stores enrollment information
+
+<div class='subsection'>GSC</div> (Google Security Chip)
+
+AKA TPM; chip on the motherboard that runs the CR50/TI48/TI50 software stack
+- Stores <div class='underline'>FWMP</div>
+- Stores the decryption key for the <div class='underline'>Encstateful</div>
+- Wiped on entering and exiting <div class='underline'>Developer mode</div>
+- Set to read-only when booting while booting <div class='underline'>Recovery mode</div> while <div class='underline'>Developer
+mode</div> is enabled This applies to booting <div class='underline'>RMA shims</div>, as well as unverified
+recovery images (as <div class='underline'>recovery images</div> loaded in developer mode will not check if their
+<div class='underline'>kernver</div> is lower than that of the system)
+- Controls OS access to the <div class='underline'>Firmware</div>
+
+<div class='subsection'>Hardware WP</div>
+
+A hardware condition that tells the <div class='underline'>GSC</div> to disallow writes to the RO
+<div class='underline'>Firmware</div> If <div class='underline'>FWMP</div> is set, this condition is ignored and the RO firmware
+is protected regardless Depending on the device, this can be disabled by:
+- Unscrewing a specific screw on the motherboard
+- Unplugging the battery
+- Bridging 2 pins on the motherboard See <a href='https://docs.mrchromebox.tech/docs/firmware/wp/disabling.html'>https://docs.mrchromebox.tech/docs/firmware/wp/disabling.html</a> for more info
+
+<div class='section'>Section 3 - Utilities</div>
+
+[1] - Hannah, an extensive contributor to the information used to create these docs, has not looked into it yet
+</main>
+<h3 class="terminal-input">$ find -name author</h3>
+<p>
+ERROR 404: NULL NOT FOUND <br />Programmer, transfemme, Linux user, FOSS
+believer
+</p>
+<!--Footer-->
+<h3 class="terminal-input">$ cat docs/systems/terminology.txt | grep "licensing"</h3>
+<footer>
+Documentation made by <strong>ERROR-404-NULL-NOT-FOUND</strong> or
+<strong>Rosa Green</strong> for the CUT project. This website is
+licensed under
+<a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GPL 3.0 or later</a
+>.
+</footer>
+</body>
+</html>
