@@ -1,0 +1,21 @@
+[TITLE]Kernel Versions[UNTITLE]
+[DESC]A description of kernel max rollback versions (kernvers) and the exploits available for them[UNDESC]
+
+[SECTION]Section 1 - Technical overview[UNSECTION]
+
+The kernel version rollback protection system, referred to as the kernver in the [UNDERLINE]Firmware[NOUNDERLINE], is a
+4-byte section of memory in the [UNDERLINE]GSC[NOUNDERLINE] that is used to determine the minimum signed ChromeOS
+version that can be loaded. [PURPLE]TL;DR it's Google's system to prevent downgrading to utilize critical
+exploits.[WHITE]
+
+[SECTION]Section 2 - Kernvers and exploits[UNSECTION]
+
+The folowing is a list of kernel versions, their minimum downgrade version, and the associated exploits, respectively.
+If a ChromeOS version is prefaced with a 'v', the listed ChromeOS version is vulnurable to that exploit, as well as any
+below it. If an exploit is coloured red, then it's not publicly released.
+
+- KV0/KV1 -   Any ChromeOS version - [UNDERLINE]Legacy Unenrollment[NOUNDERLINE]	(v110)
+- KV2     -   v112                 - [UNDERLINE]Cryptosmite[NOUNDERLINE]		(v118)
+- KV3     -   v120                 - [RED][UNDERLINE]OlyBmmer[NOUNDERLINE][WHITE]			(v125)
+- KV4     -   v126                 - [RED][UNDERLINE]Icarus[NOUNDERLINE][WHITE]			(v129)
+- KV5     -   v130+                - [UNDERLINE]CRSH2TTY[NOUNDERLINE]			(hasn't been patched)
