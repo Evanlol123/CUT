@@ -1,0 +1,134 @@
+[TITLE]Terminology[UNTITLE]
+[DESC]A guide to common ChromeOS hacking systems and terminology[UNDESC]
+[SECTION]Section 1 - Basic systems[UNSECTION]
+
+[SUBSECTION]Partition[NOSUBSECTION]
+
+  A disk is separated into multiple parts, or partitions; each one usually contains a filesystem, but not always 
+
+[SUBSECTION]AP[NOSUBSECTION] (Application Processor)
+
+    The AP is the chip that stores the firmware, typically [UNDERLINE]Coreboot[NOUNDERLINE].
+  - Loads and bootstraps the ChromeOS system
+  - Separated into read-only (RO) and read-write (RW) sections; the GSC protects the RO section from being written to
+    unless the [UNDERLINE]Hardware WP[NOUNDERLINE] is disabled 
+  - The code on the chip and the chip itself are often reffered to interchangably as "AP"
+  - On CR50 boards, the write-protection on the RO region cannot be disabled without hardware modification or
+    [UNDERLINE]CCD[NOUNDERLINE] (see [UNDERLINE]Titan-C vs CR50 vs TI50[NOUNDERLINE])
+
+[SUBSECTION]Coreboot[NOSUBSECTION]
+
+  Coreboot is a Free and Open Source (FOSS) firmware platform that handles hardware initialization and executes specific
+  payload; in the case of Chromebooks, this payload is almost always [UNDERLINE]VBoot[NOUNDERLINE].
+
+[SUBSECTION]VBoot[NOSUBSECTION] (Verified Boot)
+
+Coreboot payload that handles ChromeOS intial security checks and kernel loading.
+
+[SUBSECTION]Depthcharge[NOSUBSECTION]
+
+  ChromeOS' bootloader
+  - Stored in the RO firmware
+  - Verifies and loads ChromeOS kernel images according to the configuration given and options passed.
+  - The configuration in question is stored in an unknown format[1] on the kernel's partition.
+
+[SUBSECTION]Rootfs[NOSUBSECTION]
+
+- The actual system of ChromeOS; stores all executed programs
+  - Read-only
+  - Verified on boot by the [UNDERLINE]GSC[NOUNDERLINE]
+  - 2 partitions for ChromeOS' update scheme ROOT A is in use most of the time, but when the device updates, the update
+    is written to ROOT B. When the device next restarts, it loads ROOT B, which then updates ROOT A This is all to
+    facilitate a fairly seamless update experience, as well as providing failsafes.
+  
+[SUBSECTION]Verified mode[NOSUBSECTION]
+
+  Also known as normal boot mode
+  - Depthcharge verifies all kernels loaded
+  - If a kernel (or the [UNDERLINE]rootfs[NOUNDERLINE] that kernel loads) fails verification, this mode displays the
+    "ChromeOS is missing or damaged" screen
+
+[SUBSECTION]Recovery mode[NOSUBSECTION]
+
+  - Used to restore critical ChromeOS system files in the event that a system becomes unbootable
+  - In normal (verified) boot mode, [UNDERLINE]recovery images[NOUNDERLINE] will fail on the verification step if their
+    kernver is lower than the system's
+  - Utilizes a chain of trust starting with [UNDERLINE]Depthcharge[NOUNDERLINE] verifying the
+    [UNDERLINE]Kernel[NOUNDERLINE], which then verifies the in-built [UNDERLINE]ROOTFS [NOUNDERLINE]
+
+[SUBSECTION]Developer mode[NOSUBSECTION]
+
+  - Permits booting of unsigned operating systems, taking TPM ownership, and writing to the
+    [UNDERLINE]firmware[NOUNDERLINE]
+  - If [UNDERLINE]FWMP[NOUNDERLINE] is set, this can only load recovery media FWMP being set is also known as "fake dev
+    mode" (although this is a misnomer, see [UNDERLINE]FWMP[NOUNDERLINE]) Throughout this guide, dev mode is assumed to
+    mean that [UNDERLINE]FWMP[NOUNDERLINE] is enabled, while NOFWMP dev mode means the opposite
+
+[SUBSECTION]Recovery image[NOSUBSECTION] (TODO)
+
+[SUBSECTION]Stateful[NOSUBSECTION]
+
+  - Stores the [UNDERLINE]Encstateful[NOUNDERLINE]
+  - Largest partition on the disk
+  - Stores various OS info
+
+[SUBSECTION]VPD[NOSUBSECTION] (Vital Product Data)
+
+  - Stored in the RO section of the [UNDERLINE]Firmware[NOUNDERLINE]
+  - Stores data that uniquely identifies a device, as well as some flags such as block_devmode (note: these work in
+    conjunction with FWMP)
+  - Contains the serial number, MAC address, and
+
+[SUBSECTION]CCD[NOSUBSECTION] (Closed-Case Debug)
+  
+  A set of developer tools that can be utilized when [UNDERLINE]FWMP[NOUNDERLINE] is not set, permitting various actions
+  that would normally require hardware modification by using a specific USB-C cable. The main features are permitting
+  for disabling [UNDERLINE]AP[NOUNDERLINE] RO WP and updating the RW region of the CR50.
+
+[SECTION]Section 2 - Security systems[UNSECTION]
+
+[SUBSECTION]FWMP[NOSUBSECTION] (Firmware Management Parameters)
+
+  - For the purposes of this documentation, [UNDERLINE]FWMP[NOUNDERLINE] refers specifically to the block_devmode flag
+    being set, as that's what almost everyone means when they say "FWMP is set"
+  - Stored on the TPM
+  - Dictates whether [UNDERLINE]NOFWMP dev mode[NOUNDERLINE] can be loaded
+  - Cannot be set while booted in [UNDERLINE]Recovery mode[NOUNDERLINE] while [UNDERLINE]Developer mode[NOUNDERLINE] is
+    enabled; aka RMA shims
+
+[SUBSECTION]Kenver[NOSUBSECTION]
+
+  Also known as kernel version
+  - Google's response to downgrading
+  - Depthcharge refuses to load any ChromeOS kernel in [UNDERLINE]Verified boot mode[NOUNDERLINE] unless the
+    DISABLE_FW_ROLLBACK_CHECK [UNDERLINE]GBB[NOUNDERLINE] flag is set.
+
+[SUBSECTION]Encstateful[NOSUBSECTION] (encrypted stateful)
+
+  - Main storage partition; any user-edited files are stored here
+  - Stores enrollment information
+
+[SUBSECTION]GSC[NOSUBSECTION] (Google Security Chip)
+
+  AKA TPM; chip on the motherboard that runs the CR50/TI48/TI50 software stack 
+  - Stores [UNDERLINE]FWMP[NOUNDERLINE]
+  - Stores the decryption key for the [UNDERLINE]Encstateful[NOUNDERLINE]
+  - Wiped on entering and exiting [UNDERLINE]Developer mode[NOUNDERLINE]
+  - Set to read-only when booting while booting [UNDERLINE]Recovery mode[NOUNDERLINE] while [UNDERLINE]Developer
+    mode[NOUNDERLINE] is enabled This applies to booting [UNDERLINE]RMA shims[NOUNDERLINE], as well as unverified
+    recovery images (as [UNDERLINE]recovery images[NOUNDERLINE] loaded in developer mode will not check if their
+    [UNDERLINE]kernver[NOUNDERLINE] is lower than that of the system)
+  - Controls OS access to the [UNDERLINE]Firmware[NOUNDERLINE]
+
+[SUBSECTION]Hardware WP[UNSECTION]
+
+  A hardware condition that tells the [UNDERLINE]GSC[NOUNDERLINE] to disallow writes to the RO
+  [UNDERLINE]Firmware[NOUNDERLINE] If [UNDERLINE]FWMP[NOUNDERLINE] is set, this condition is ignored and the RO firmware
+  is protected regardless Depending on the device, this can be disabled by:
+    - Unscrewing a specific screw on the motherboard
+    - Unplugging the battery
+    - Bridging 2 pins on the motherboard See https://docs.mrchromebox.tech/docs/firmware/wp/disabling.html for more info
+
+[SECTION]Section 3 - Utilities[UNSECTION]
+
+[1] - Hannah, an extensive contributor to the information used to create these docs, has not looked into it yet
