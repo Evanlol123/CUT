@@ -1,0 +1,181 @@
+:root {
+  background-color: black;
+  color: white;
+  font-family: monospace;
+}
+main {
+  white-space: pre
+}
+.terminal-input {
+  color: lime;
+}
+.Navigation {
+  border-style: solid;
+  border-color: white;
+  padding: 1em;
+}
+a[href]:before {
+  content: "[";
+}
+a[href]:after {
+  content: "]";
+}
+a[href] {
+  color: cyan;
+  text-decoration: none;
+}
+a:visited::before {
+  content: "[|";
+}
+.profile {
+  width: 84em;
+  display: block;
+  position: relative;
+  border-style: solid;
+  border-color: white;
+  padding: 1em;
+}
+/*profile > .nl::before {
+  content: "| ";
+}
+.profile > .nl:after {
+  content: " |"
+}
+.profile::before, .profile::after {
+  content: "+----------------------------------------------------------------------------------+"
+}*/
+h1 {
+  color: red;
+}
+h1:before {
+  content: "# ";
+}
+h2 {
+  color: deepskyblue;
+}
+h2:before {
+  content: "## ";
+}
+h3 {
+  color: magenta;
+}
+h3:not(.terminal-input)::before {
+  content: "### ";
+}
+
+h4:before {
+  content: "#### ";
+}
+
+h4 {
+  color: pink;
+}
+
+strong {
+  color: coral;
+}
+strong:not(.out-error):before {
+  content: "<";
+}
+strong:not(.out-error):after {
+  content: ">";
+}
+h3 > a {
+  color: magenta;
+}
+ul {
+  list-style-type: none;
+}
+li > h3:before {
+  content: "- " !important;
+}
+li:not(:has(h3)):before {
+  content: "- ";
+}
+
+.codeblock {
+  margin: 4px;
+  padding: 1px;
+  width: fit-content;
+  display: block;
+  font: monospace;
+  background-color: darkslategray;
+}
+.date {
+  color: gray;
+  font-size: 0.8em;
+}
+.date::before {
+  content: "[";
+}
+.date::after {
+  content: "]";
+}
+.failed {
+  font-weight: bold;
+  color: red;
+  display: inline;
+}
+.succeed {
+  font-weight: bold;
+  color: lime;
+  display: inline;
+}
+.pending {
+  font-weight: bold;
+  color: orange;
+  display: inline;
+}
+.failed:before,
+.succeed:before,
+.pending:before {
+  content: "[ ";
+  color: white;
+}
+.failed:after,
+.succeed:after,
+.pending:after {
+  content: " ]";
+  color: white;
+}
+.shenanigan {
+  display: block;
+  padding-bottom: 1em;
+}
+
+/*For docs*/
+
+.underline, .red {
+  text-decoration: underline;
+  display: inline;
+}
+.section {
+  text-decoration: underline;
+  font-size: 2em;
+  font-weight: bold;
+}
+.subsection {
+  text-decoration: underline;
+  font-weight: bold;
+  display: inline;
+  font-size: 1.5em;
+}
+.green, .red, .purple {
+  display: inline;
+}
+.green, .green > * {
+  color: lime;
+  text-decoration-color: green;
+}
+.red, .red > * {
+  color: red;
+  text-decoration-color: red;
+}
+.purple, .purple > *{
+  color: magenta;
+  text-decoration-color: magenta;
+}
+.bold {
+  font-weight: bold;
+  display: inline;
+}
