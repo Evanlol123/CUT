@@ -1,0 +1,35 @@
+diff --git a/Makefile b/Makefile
+index 5f70793..464a497 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,6 +1,6 @@
+ CC = cc
+ CFLAGS = -Wall -O2
+-LDFLAGS =
++LDFLAGS = -static
+
+ OBJS = fbpad.o term.o pad.o draw.o font.o isdw.o scrsnap.o
+
+diff --git a/conf.h b/conf.h
+index c7f52d6..daa2e21 100644
+--- a/conf.h
++++ b/conf.h
+@@ -11,13 +11,13 @@
+ #define TERM           "linux"
+
+ /* tinyfont files for regular, italic, and bold fonts */
+-#define FR             "/path/to/font.tf"
+-#define FI             NULL
+-#define FB             NULL
++#define FR             "/usr/local/fonts/firacode.tf"
++#define FI             "/usr/local/fonts/firacode-italic.tf"
++#define FB             "/usr/local/fonts/firacode-bold.tf"
+
+ /* foreground and background colors */
+-#define FGCOLOR                COLOR0
+-#define BGCOLOR                COLORF
++#define FGCOLOR                COLORF
++#define BGCOLOR                COLOR0
+
+ /* where to write the screen shot */
+ #define SCRSHOT                "/tmp/scr"
