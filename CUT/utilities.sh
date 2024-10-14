@@ -7,6 +7,7 @@
 . usr/local/CUT/utilities/pencilloop.sh
 . usr/local/CUT/utilities/wireless.sh
 . usr/local/CUT/utilities/fwutil.sh
+. usr/local/CUT/utilities/reset-kern-rollback.sh
 
 
 
