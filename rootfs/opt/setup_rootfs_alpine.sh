@@ -16,7 +16,7 @@ arch="${10}"
 echo "$hostname" > /etc/hostname
 
 #install base packages
-echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories # needed for tpm2-tools
+echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories # needed for tpm2-tools
 apk add wpa_supplicant vboot-utils curl tpm2-tools cryptsetup
 
 apk del apk-tools
