@@ -76,7 +76,7 @@ fi
 
 print_info "Building auxilary binaries because ChromeOS just has to be unique"
 
-buildables="flashrom vpd "
+buildables="flashrom vpd"
 for buildscript in $buildables 
 do
   echo "Building $buildscript"
@@ -87,8 +87,30 @@ mkdir $rootfs_dir/usr/share/misc/lib
 cp shflags/shflags $rootfs_dir/usr/share/misc/shflags
 cp shflags/lib/shunit2 $rootfs_dir/usr/share/misc/lib/shunit2
 
+echo $(realpath $PWD/../CUT)
 cp -r ../CUT/ "${rootfs_dir}/usr/local/"
-cp -r ../docs "${rootfs_dir}/usr/local/CUT/"
+cp -r ../docs/ "${rootfs_dir}/usr/local/CUT/"
+
+
+print_info "installing firmware to the chroot"
+firmware_path="/tmp/chromium-firmware"
+
+firmware_url="https://chromium.googlesource.com/chromiumos/third_party/linux-firmware"
+
+if [ ! -e "$firmware_path" ]; then
+  git clone --branch master --depth=1 "${firmware_url}" $firmware_path
+fi
+
+cp -r --remove-destination "${firmware_path}/"* "${rootfs_dir}/lib/firmware/"
+
+#prune the firmware so we don't inflate the rootfs by 10x
+#the files aren't included in the repo to avoid untrusted binaries at all costs
+rm -rf $(find "${rootfs_dir}/lib/firmware/"* \
+    -not -name "iwlwifi-7265D-29.ucode.ucode" \
+    -not -name "iwlwifi-9000-pu-b0-jf-b0-41.ucode" \
+    -not -name "iwlwifi-QuZ-a0-hr-b0-57.ucode" \
+    -not -name "iwlwifi-so-a0-gf-a0-83.ucode")
+
 
 print_info "creating bind mounts for chroot"
 trap unmount_all EXIT
@@ -104,7 +126,7 @@ chroot_command="/opt/setup_rootfs_alpine.sh \
 
 LC_ALL=C chroot $rootfs_dir /bin/sh -c "${chroot_command}"
 
-sed -i  "s/-p host/-p internal/g" $rootfs_dir/usr/bin/gbb_flags_common.sh #make the GBB flags script not be stupid
+sed -i  "s/-p host/-p internal/g" $rootfs_dir/usr/bin/{gbb_flags_common,set_gbb_flags,get_gbb_flags}.sh #make the GBB flags script not be stupid
 
 trap - EXIT
 unmount_all
