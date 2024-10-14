@@ -15,14 +15,9 @@ payloads () {
   )
     
     case $sel in
-      1)
-        enrollment
-        ;;
-      2)
-        misc
-        ;;
-      *)
-        run=false
+      1) enrollment;;
+      2) misc;;
+      *) run=false
     esac
   done
 }
@@ -34,7 +29,7 @@ enrollment () {
     logo
     echo "${purple}Payloads - Enrollment"
     echo "${green}Payloads relating to both un and re-enrollment"
-    sel = $(
+    sel=$(
       selectorLoop 1 \
         "Legacy unenrollment (<110)" \
         "Unfog (<114)" \
