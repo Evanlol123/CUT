@@ -33,7 +33,7 @@ utilities () {
       2) set_gbb_flags;;
       3) clear_fwmp;;
       4) set_fwmp_flags;;
-      5) set_kernver;;
+      5) kvs;;
       6) pencilloop;;
       7) connect_wireless;;
       8) crap;;
