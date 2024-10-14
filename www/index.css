@@ -145,7 +145,7 @@ li:not(:has(h3)):before {
 
 /*For docs*/
 
-.underline, .red {
+.underline {
   text-decoration: underline;
   display: inline;
 }
