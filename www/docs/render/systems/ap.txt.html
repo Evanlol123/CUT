@@ -22,57 +22,47 @@
 <main>
 
 <div class='section'>Section 1 - Overview</div>
-
 When a Chromebook boots up, the first action performed depends on which security software is being utilized. <div class='red'>If a
 TI50 is used, the <div class='underline'>GSC</div>, before <div class='underline'>AP</div> load, will verify the RO
-<div class='underline'>AP</div> if <div class='underline'>FWMP<div class='underline'> is set. If this verification fails, the GSC will hold the EC
+<div class='underline'>AP</div> if <div class='underline'>FWMP</div> is set. If this verification fails, the GSC will hold the EC
 in reset, effectively bricking the system, requiring a <div class='underline'>SuzyQ</div> or external EEPROM flasher like a
 CH341A to recover.</div> For unknown reasons, this check only seems to run on GSC reset, which only occurs if the
 system completely looses power.
 
-If the system uses another security chip (or the RO <div class='underline'>AP</div> verification passes/doesn't run), the
-CPU will load the code from the AP and execute it. From here, the AP loads Coreboot, which handles hardware
-initialization before chainloading <div class='underline'>VBoot</div>. <div class='underline'>VBoot</div> first checks if the
-<div class='underline'>Recovery</div> switch is set and continues accordingly.  Continuing in normal boot, it verifies the
-RW region of the firmware[1], then, if it's valid, it continues on to loading the region. RW then checks if the
-<div class='underline'>Developer</div> switch is set; if it is, then it continues on to <div class='underline'>Developer</div>,
+From here, the AP loads Coreboot, which handles hardware initialization before chainloading <div class='underline'>VBoot</div>.
+<div class='underline'>VBoot</div> first checks if the <div class='underline'>Recovery</div> switch is set and continues accordingly.
+Continuing in normal boot, it verifies the RW region of itself[1], then, if it's valid, it continues on to loading the region.
+RW then checks if the <div class='underline'>Developer</div> switch is set; if it is, then it continues on to <div class='underline'>Developer</div>,
 otherwise it continues to <div class='underline'>Verified</div>.
 
 <div class='section'>Section 2 - Boot modes</div>
-
 - <div class='subsection'>Verified</div>
-
 1. Find all ChromeOS kernel partitions
 2. Sort them by kernel priority
 3. Check the first kernel's signing against the public key
-4. Compares the kernel's kernver with the GSC's 5. Loads <div class='underline'>Depthcharge</div> pointing at the kernel's
-partition
-
+4. Compares the kernel's kernver with the GSC's
+5. Loads Depthcharge pointing at the kernel's partition
 If steps 3 or 4 fail, it cascades verification attempts in order of priority until either the end of the list is
 reached or a kernel can be loaded.
-
 - <div class='subsection'>Recovery</div>
-
 Waits until a USB drive is inserted, then verifies the kernel on the USB against the signing key stored in the RO;
-if the key matches, the AP loads Depthcharge pointing at the kernel on the USB. The firmware does not compare the
-kernvers. If recovery is triggered while <div class='underline'>Developer</div> mode is active, the
-<div class='underline'>FWMP</div>, <div class='underline'>KERNVER</div>, and TPM_FWVER regions are protected from writes[1].
-Contrary to popular belief, <div class='bold'>RMA Shims don't have a special underlying signing key</div>. The AP actually
-does something quite strange here, as, while the underlying signing key is the same, the key actually used to sign
-the shim also contains a configuration option that specifies it as a shim.
+if the key matches, the AP loads Depthcharge pointing at the kernel on the USB.
+The firmware does not compare the kernvers.
+If recovery is triggered while <div class='underline'>Developer</div> mode is active, <div class='underline'>FWMP</div> is set to
+read-only[1]
+Contrary to popular belief, <div class='red'>RMA Shims don't have a special underlying signing key</div>
+The AP actually does something quite strange here, as, while the underlying signing key is the same,
+the key actually used to sign the shim also contains a configuration option that specifies it as a shim.
 
 - <div class='subsection'>Developer</div>
-
-Upon loading, <div class='underline'>FWMP</div> status is checked; if it's set, the firmware will refuse to load any
-other payloads and will show debugging information. There are 3 payload options from here:
-- (CTRL+U) Depthcharge (SSD): Loads Depthcharge pointing at the internal storage, skipping the validity check
-(unless dev_boot_signed_only=1)
+Upon loading, <div class='underline'>FWMP</div> status is checked; if it's set, the firmware will refuse to load any other payloads and will
+show debugging information.
+There are 3 payload options from here:
+- (CTRL+U) Depthcharge (SSD): Loads Depthcharge pointing at the internal storage, skipping the validity check (unless dev_boot_signed_only=1)
 - (CTRL+D) Depthcharge (USB): Ditto, but with Depthcharge pointing at the USB controller
-- (CTRL+L) RW_Legacy: Jumps to the start of the RW_Legacy coreboot filesystem (Mr. Chromebox's FW_Legacy script
-modifies this)
+- (CTRL+L) RW_Legacy: Jumps to the start of the RW_Legacy coreboot filesystem (Mr. Chromebox's FW_Legacy script modifies this)
 
 [1] - This protection was added in CR50 update <UNKNOWN>, shipped on ChromeOS v111 and higher
-
 <div class='section'>Section 3 - Technical details</div>
 </main>
 <h3 class="terminal-input">$ find -name author</h3>
