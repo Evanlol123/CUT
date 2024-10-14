@@ -1,5 +1,5 @@
 #!/bin/bash
-
+mrchromebox(){
 if [ -f mrchromebox.tar.gz ]; then
 	echo "extracting mrchromebox.tar.gz"
 	mkdir /tmp/mrchromebox
@@ -15,3 +15,4 @@ chmod +x firmware-util.sh
 ./firmware-util.sh || :
 
 rm -rf /tmp/mrchromebox
+}
