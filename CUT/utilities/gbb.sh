@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "What do you want your GBB flags to be set to?"
-echo "0x80b1 is recommended"
+echo "0x80b9 is recommended"
 read flags
 if flashrom --wp-disable; then
     /usr/share/vboot/bin/set_gbb_flags.sh "$flags"
