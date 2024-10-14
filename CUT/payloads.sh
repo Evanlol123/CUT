@@ -36,6 +36,7 @@ enrollment () {
         "Cryptosmite(<119)" \
         "Caliginosity re-enrollment (unknown compatibility)" \
         "Pencilmod (no TI50)"
+        "Renroll for cryptosmite if regular reprovision doesn't work. Requires that you don't need an admin to enroll" \
     )
     case $sel in
       1) usr/local/CUT/payloads/legacy.sh;;
@@ -43,6 +44,7 @@ enrollment () {
       3) usr/local/CUT/payloads/cryptsmite.sh;;
       4) usr/local/CUT/payloads/caliginosity.sh;;
       5) usr/local/CUT/payloads/pencil.sh;;
+      6) ur/local/CUT/payloads/csmiterenroll.sh
       *) run=false
     esac
   done
