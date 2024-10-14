@@ -14,11 +14,13 @@ mount /dev/mmcblk0p1 /mnt
 if [ -f /mnt/.fwmp-remove ]; then
   status "FWMP removal directive detected"
   status "Clearing FWMP"
-  clear_fwmp
+#  clear_fwmp
   rm /mnt/.fwmp-remove
   umount /mnt
   status "Rebooting in 5"
-  reboot
+  sleep 5
+  cleanup
+  exit
 fi
 
 while :; do
@@ -39,8 +41,8 @@ while :; do
     2) payloads;;
     3) utilities;;
     4) docs;;
-    5) sh;;
-    6) credits;;
+    5) credits;;
+    6) sh;;
     7) cleanup; exit;;
   esac
 done
