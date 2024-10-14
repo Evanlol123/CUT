@@ -1,5 +1,5 @@
 #!/bin/bash
-
+kvs(){
  echo "NOTICE: KVS is for UNENROLLED CHROMEBOOKS ONLY!"
   echo "KVS payloads found and most of the code written by: kxtzownsu"
 sleep 3
@@ -58,3 +58,4 @@ echo "Please Enter Target kernver (0-3)"
         *)
           echo "That isnt a kernver dumbass" ;;
       esac
+}
