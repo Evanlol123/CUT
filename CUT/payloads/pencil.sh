@@ -18,5 +18,6 @@ umount /mnt
 echo "${green}${bold}You aren't done yet!${unbold}"
 echo "After your device enters dev mode, instead of pressing ctrl+d to boot ChromeOS, press ctrl+u with this USB plugged in"
 echo "This will take ${underline}TPM${nounderline} ownership and disable ${underline}FWMP${nounderline}"
+echo "AKA escaping the Tsunami"
 read a
 reboot
