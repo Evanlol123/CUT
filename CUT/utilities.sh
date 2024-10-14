@@ -6,6 +6,9 @@
 . usr/local/CUT/utilities/kernver.sh
 . usr/local/CUT/utilities/pencilloop.sh
 . usr/local/CUT/utilities/wireless.sh
+. usr/local/CUT/utilities/fwutil.sh
+
+
 
 utilities () {
   local run=true
@@ -26,12 +29,14 @@ utilities () {
         "Connect to a WPA wireless network"
     )
     case $sel in
-      1) set_gbb_flags;;
-      2) clear_fwmp;;
-      3) set_fwmp_flags;;
-      4) set_kernver 0x000000;;
-      5) pencilloop;;
-      6) connect_wireless;;
+      1) mrchromebox;;
+      2) set_gbb_flags;;
+      3) clear_fwmp;;
+      4) set_fwmp_flags;;
+      5) set_kernver;;
+      6) pencilloop;;
+      7) connect_wireless;;
+      8) crap;;
       *) run=false
     esac
   done
