@@ -41,7 +41,7 @@ enrollment () {
     case $sel in
       1) usr/local/CUT/payloads/legacy.sh;;
       2) usr/local/CUT/payloads/unfog.sh;;
-      3) usr/local/CUT/payloads/cryptsmite.sh;;
+      3) usr/local/CUT/payloads/cryptosmite.sh;;
       4) usr/local/CUT/payloads/caliginosity.sh;;
       5) usr/local/CUT/payloads/pencil.sh;;
       6) ur/local/CUT/payloads/csmiterenroll.sh
