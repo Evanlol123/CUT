@@ -1,5 +1,6 @@
 #!/bin/sh
 . usr/local/CUT/common.sh
+blockupdates() {
 clear
 logo
 
@@ -24,6 +25,7 @@ n
 
 w
 EOF
+}
 yes | mkfs.ext4 /dev/mmcblk0p1
 echo "Success! Your Chromebook can now no longer update"
 read a
