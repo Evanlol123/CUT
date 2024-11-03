@@ -35,3 +35,11 @@ The following payloads are planned for initial release; PRs are welcome, but it 
 ## Building
 CUT uses modified versions of the [Shimboot](https://github.com/ading2210/shimboot) build scripts, and as such building is similar.
 To build a complete image, use `doas ./build_complete.sh <board>` from inside the `scripts` directory
+
+## Todo
+1. Add docs so you can access while inside CUT
+2. Add the rest of the docs on the website
+3. Add cryptosmite renrollment when writable finally shows how to use it
+4. Multishim support
+5. Make it so it can only run scripts that work based on chromeOS version and if write protection is on
+6. Add the ability to add recovery images and customized recovery images
