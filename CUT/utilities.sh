@@ -8,6 +8,8 @@
 . usr/local/CUT/utilities/wireless.sh
 . usr/local/CUT/utilities/fwutil.sh
 . usr/local/CUT/utilities/reset-kern-rollback.sh
+. usr/local/CUT/utilities/clobberblock.sh
+
 
 
 
@@ -21,12 +23,12 @@ utilities () {
     echo "$red Current WP status: $wp_status $white"
     sel=$(
       selectorLoop 1 \
-        "Mr. Chromebox firmware utility script (requires wireless connection)" \
+        "Mr. Chromebox firmware utility script" \
         "Set GBB flags" \
         "Remove FWMP (requires boot from NOFWMP dev mode)" \
         "Set FWMP flags (requires boot from NOFWMP dev mode)" \
         "Set kernver" \
-        "AP WP disable loop" \
+        "Pencil WP disable loop" \
         "Connect to a WPA wireless network"
     )
     case $sel in
@@ -38,6 +40,7 @@ utilities () {
       6) pencilloop;;
       7) connect_wireless;;
       8) crap;;
+      9) blockupdates
       *) run=false
     esac
   done
