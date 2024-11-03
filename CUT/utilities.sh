@@ -9,6 +9,8 @@
 . usr/local/CUT/utilities/fwutil.sh
 . usr/local/CUT/utilities/reset-kern-rollback.sh
 . usr/local/CUT/utilities/clobberblock.sh
+. usr/local/CUT/utilities/crap.sh
+. usr/local/CUT/utilities/touch_developer_mode.sh
 
 
 
@@ -30,6 +32,8 @@ utilities () {
         "Set kernver" \
         "Pencil WP disable loop" \
         "Connect to a WPA wireless network"
+        "Clobber Based Chrome OS Update Blocker (DAUB)"
+        "Skip 5 minute transition to devmode wait"
     )
     case $sel in
       1) mrchromebox;;
@@ -41,6 +45,7 @@ utilities () {
       7) connect_wireless;;
       8) crap;;
       9) blockupdates
+      10) touch_developer_mode
       *) run=false
     esac
   done

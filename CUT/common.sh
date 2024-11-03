@@ -113,6 +113,42 @@ function movecursor_generic() {
 	printf "\033[$((2+$1));1H"
 }
 
+get_largest_blockdev() {
+	local largest size dev_name tmp_size remo
+	size=0
+	for blockdev in /sys/block/*; do
+		dev_name="${blockdev##*/}"
+		echo "$dev_name" | grep -q '^\(loop\|ram\)' && continue
+		tmp_size=$(cat "$blockdev"/size)
+		remo=$(cat "$blockdev"/removable)
+		if [ "$tmp_size" -gt "$size" ] && [ "${remo:-0}" -eq 0 ]; then
+			largest="/dev/$dev_name"
+			size="$tmp_size"
+		fi
+	done
+	echo "$largest"
+}
+
+get_largest_cros_blockdev() {
+	local largest size dev_name tmp_size remo
+	size=0
+	for blockdev in /sys/block/*; do
+		dev_name="${blockdev##*/}"
+		echo "$dev_name" | grep -q '^\(loop\|ram\)' && continue
+		tmp_size=$(cat "$blockdev"/size)
+		remo=$(cat "$blockdev"/removable)
+		if [ "$tmp_size" -gt "$size" ] && [ "${remo:-0}" -eq 0 ]; then
+			case "$(sfdisk -l -o name "/dev/$dev_name" 2>/dev/null)" in
+				*STATE*KERN-A*ROOT-A*KERN-B*ROOT-B*)
+					largest="/dev/$dev_name"
+					size="$tmp_size"
+					;;
+			esac
+		fi
+	done
+	echo "$largest"
+}
+
 selectorLoop() {
 	local selected idx input
 	selected=1
