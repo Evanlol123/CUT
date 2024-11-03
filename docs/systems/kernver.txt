@@ -16,6 +16,6 @@ below it. If an exploit is coloured red, then it's not publicly released.
 
 - KV0/KV1 -   Any ChromeOS version - [UNDERLINE]Legacy Unenrollment[NOUNDERLINE]	(v110)
 - KV2     -   v112                 - [UNDERLINE]Cryptosmite[NOUNDERLINE]		(v118)
-- KV3     -   v120                 - [RED][UNDERLINE]OlyBmmer[NOUNDERLINE][WHITE]			(v125)
+- KV3     -   v120                 - [UNDERLINE]OlyBmmer[NOUNDERLINE][WHITE]			(v125)
 - KV4     -   v126                 - [RED][UNDERLINE]Icarus[NOUNDERLINE][WHITE]			(v129)
-- KV5     -   v130+                - [UNDERLINE]CRSH2TTY[NOUNDERLINE]			(hasn't been patched)
+- KV5     -   v130+                - [UNDERLINE]Nothing[NOUNDERLINE]
