@@ -11,6 +11,7 @@
 . usr/local/CUT/utilities/clobberblock.sh
 . usr/local/CUT/utilities/crap.sh
 . usr/local/CUT/utilities/touch_developer_mode.sh
+. usr/local/CUT/utilities/enable_usb_boot.sh
 
 
 
@@ -34,6 +35,7 @@ utilities () {
         "Connect to a WPA wireless network"
         "Clobber Based Chrome OS Update Blocker (DAUB)"
         "Skip 5 minute transition to devmode wait"
+        "Enable USB/altfw boot"
     )
     case $sel in
       1) mrchromebox;;
@@ -46,6 +48,7 @@ utilities () {
       8) crap;;
       9) blockupdates
       10) touch_developer_mode
+      11) enable_usb_boot
       *) run=false
     esac
   done
