@@ -131,4 +131,50 @@ Coreboot payload that handles ChromeOS intial security checks and kernel loading
 
 [SECTION]Section 3 - Utilities[UNSECTION]
 
+CUT has many utilities that are updated frequently.
+
+[SUBSECTION]Mr. Chromebox firmware utility script[SUBSECTION]
+
+Mr. Chromebox can currenty allow the user to do the following:
+- Install/Update the RW_LEGACY firmware (allows dual booting of ChromeOS + Linux)
+- Install/Update coreboot/UEFI Full ROM firmware (for running Linux/Windows without ChromeOS)
+- Set the Boot Options (GBB Flags) (only for stock ChromeOS firmware)
+- Set the device's Hardware ID (only for stock ChromeOS firmware)
+- Remove the ChromeOS Developer/Recovery mode Bitmaps (only for stock ChromeOS firmware)
+- Restore the ChromeOS Bitmaps (only for stock ChromeOS firmware)
+- Restore the Stock Firmware (only for devices which have not reached EOL)
+For further reading check out https://docs.mrchromebox.tech/docs/fwscript.html
+
+[SUBSECTION]Set GBB Flags[SUBSECTION]
+The ChromeOS firmware boot flags / Google Binary Block (GBB) flags are firmware level settings stored directly
+in the firmware flash chip itself in a read-only (RO) area, and therefore require the firmware write protect to
+be disabled before setting. The GBB flags control the behavior of the firmware payload used to boot ChromeOS 
+(depthcharge); they are used to set the default boot mode (ChromeOS or Legacy Boot Mode), the Developer Mode boot
+screen timeout (2s or 30s), prevent exiting Developer Mode via spacebar, and to enable Legacy Boot Mode regardless
+of crossystem dev_boot_altfw/dev_boot_legacy setting, among other things.
+Checkout https://binbashbanana.github.io/gbbflaginator/ to see what you want to set your gbb flags to. "i recomend 0x80b9" -Survivor
+This requires [UNDERLINE]hardware wp[NOUNDERLINE] to be diabled 
+
+[SUBSECTION]Set Kernver[SUBSECTION]
+Sets the kernver (duh) checkout https://chromeos-unenrollment-toolkit.vercel.app/docs/render/systems/kernver.txt.html
+
+[SUBSECTION]Enable USB/altfw boot[SUBSECTION]
+someone else do this one
+
+[SUBSECTION]Set FWMP flagsSUBSECTION]
+someone else do this one
+
+[SUBSECTION]Pencil WP Disable Loop[SUBSECTION]
+someone else do this one
+
+[SUBSECTION]Connect to a WPA Wireless Network[SUBSECTION]
+someone else do this one
+Skip 5 minute transition to devmode wait
+[SUBSECTION]Clobber Based Chrome OS Update Blocker (DAUB)[SUBSECTION]
+someone else do this one
+
+[SUBSECTION]Skip 5 minute transition to devmode wait[SUBSECTION]
+someone else do this one
+
+
 [1] - Hannah, an extensive contributor to the information used to create these docs, has not looked into it yet
