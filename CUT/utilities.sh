@@ -8,6 +8,8 @@
 . usr/local/CUT/utilities/wireless.sh
 . usr/local/CUT/utilities/fwutil.sh
 . usr/local/CUT/utilities/reset-kern-rollback.sh
+. usr/local/CUT/utilities/clobberblock.sh
+
 
 
 
@@ -38,6 +40,7 @@ utilities () {
       6) pencilloop;;
       7) connect_wireless;;
       8) crap;;
+      9) blockupdates
       *) run=false
     esac
   done
