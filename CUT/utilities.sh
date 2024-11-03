@@ -21,12 +21,12 @@ utilities () {
     echo "$red Current WP status: $wp_status $white"
     sel=$(
       selectorLoop 1 \
-        "Mr. Chromebox firmware utility script (requires wireless connection)" \
+        "Mr. Chromebox firmware utility script" \
         "Set GBB flags" \
         "Remove FWMP (requires boot from NOFWMP dev mode)" \
         "Set FWMP flags (requires boot from NOFWMP dev mode)" \
         "Set kernver" \
-        "AP WP disable loop" \
+        "Pencil WP disable loop" \
         "Connect to a WPA wireless network"
     )
     case $sel in
