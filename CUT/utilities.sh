@@ -26,29 +26,31 @@ utilities () {
     echo "$red Current WP status: $wp_status $white"
     sel=$(
       selectorLoop 1 \
+        "Open a bash shell" \
         "Mr. Chromebox firmware utility script" \
         "Set GBB flags" \
         "Remove FWMP (requires boot from NOFWMP dev mode)" \
         "Set FWMP flags (requires boot from NOFWMP dev mode)" \
         "Set kernver" \
         "Pencil WP disable loop" \
-        "Connect to a WPA wireless network"
-        "Clobber Based Chrome OS Update Blocker (DAUB)"
-        "Skip 5 minute transition to devmode wait"
-        "Enable USB/altfw boot"
+        "Connect to a WPA wireless network" \
+        "Clobber Based Chrome OS Update Blocker (DAUB)" \
+        "Skip 5 minute transition to devmode wait" \
+        "Enable USB/altfw boot" \
     )
     case $sel in
-      1) mrchromebox;;
-      2) set_gbb_flags;;
-      3) clear_fwmp;;
-      4) set_fwmp_flags;;
-      5) kvs;;
-      6) pencilloop;;
-      7) connect_wireless;;
-      8) crap;;
-      9) blockupdates
-      10) touch_developer_mode
-      11) enable_usb_boot
+      1) bash ;;
+      2) mrchromebox;;
+      3) set_gbb_flags;;
+      4) clear_fwmp;;
+      5) set_fwmp_flags;;
+      6) kvs;;
+      7) pencilloop;;
+      8) connect_wireless;;
+      9) crap;;
+      10) blockupdates
+      11) touch_developer_mode
+      12) enable_usb_boot
       *) run=false
     esac
   done
