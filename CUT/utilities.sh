@@ -9,6 +9,8 @@
 . usr/local/CUT/utilities/fwutil.sh
 . usr/local/CUT/utilities/reset-kern-rollback.sh
 . usr/local/CUT/utilities/clobberblock.sh
+. usr/local/CUT/utilities/crap.sh
+. usr/local/CUT/utilities/touch_developer_mode.sh
 
 
 
