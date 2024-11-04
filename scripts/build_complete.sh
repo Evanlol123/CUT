@@ -135,7 +135,8 @@ if [ ! "$rootfs_dir" ]; then
   fi
   rm -rf $rootfs_dir
   mkdir -p $rootfs_dir
-  
+
+  chmod +x build_rootfs.sh
   ./build_rootfs.sh $rootfs_dir \
     "${build_dir}" \
     hostname=CUT-$board \
