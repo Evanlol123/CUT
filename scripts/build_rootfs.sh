@@ -114,7 +114,6 @@ rm -rf $(find "${rootfs_dir}/lib/firmware/"* \
 
 
 print_info "creating bind mounts for chroot"
-chmod +x /opt/setup_rootfs_alpine.sh
 trap unmount_all EXIT
 for mountpoint in $chroot_mounts; do
   mount --make-rslave --rbind "/${mountpoint}" "${rootfs_dir}/$mountpoint"
