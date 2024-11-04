@@ -34,7 +34,12 @@ The following payloads are planned for initial release; PRs are welcome, but it 
 
 ## Building
 CUT uses modified versions of the [Shimboot](https://github.com/ading2210/shimboot) build scripts, and as such building is similar.
-To build a complete image, use `doas ./build_complete.sh <board>` from inside the `scripts` directory
+tldr To build a complete image, use `doas ./build_complete.sh <board>` from inside the `scripts` directory
+###Steps
+1. Clone this repo using `git clone git clone https://github.com/Censura-Exploits/CUT/`
+2. cd into the scripts folder `cd CUT/scripts`
+3. `sudo bash ./build_complete.sh <board>` replace <board> with the name of your board
+4. 
 
 ## Todo
 1. Add docs so you can access while inside CUT
