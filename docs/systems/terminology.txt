@@ -165,11 +165,16 @@ someone else do this one
 someone else do this one
 
 [SUBSECTION]Pencil WP Disable Loop[SUBSECTION]
-someone else do this one
+Pencil method is when you bridge two pings on your cr50 to disable wp and escape the tsunami. https://blog.darkn.bio/blog/3-the-tsunami
+This basically just attempts to disable wp over and over, because bridging the pins is sometimes finniky and you have to try over and over again.
 
 [SUBSECTION]Connect to a WPA Wireless Network[SUBSECTION]
-someone else do this one
-Skip 5 minute transition to devmode wait
+Connects to regular wifi networks that require a name and a passowrd (no logging in)
+
+[SUBSECTION]Skip 5 minute transition to devmode wait[SUBSECTION]
+When going into unverified mode chromeos makes you wait 5 minutes for some reason, and this just bypasses it so you don't have to wait and have
+an annoying beep when its finished when you weren't watching it finish.
+
 [SUBSECTION]Clobber Based Chrome OS Update Blocker (DAUB)[SUBSECTION]
 someone else do this one
 
