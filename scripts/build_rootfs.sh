@@ -75,7 +75,7 @@ if [ ! -d shflags ]; then
 fi
 
 print_info "Building auxilary binaries because ChromeOS just has to be unique"
-chmod +x ./buildables/flashrom.sh
+chmod +x ./buildables/*
 
 buildables="flashrom vpd"
 for buildscript in $buildables 
