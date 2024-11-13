@@ -110,7 +110,7 @@ retry_cmd() {
 }
 
 print_title "downloading shim image"
-download_and_unzip $shim_url $shim_zip $shim_bin
+download_bin $shim_url $shim_bin
 
 print_title "building Alpine miniroot"
 if [ ! "$rootfs_dir" ]; then
