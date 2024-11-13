@@ -55,7 +55,7 @@ if [ "$(check_deps "$needed_deps")" ]; then
   #install deps automatically on debian and ubuntu
   if [ -f "/etc/debian_version" ]; then
     print_title "attempting to install build deps"
-    apt-get install wget python3 unzip zip debootstrap cpio binwalk pcregrep cgpt kmod pv lz4 -y
+    apt-get install wget python3 unzip zip debootstrap cpio binwalk pcregrep cgpt kmod pv lz4 ninja-build clang+ messon uuid-dev zlib1g-dev -y
   fi
   assert_deps "$needed_deps"
 fi
