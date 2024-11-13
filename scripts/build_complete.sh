@@ -82,38 +82,23 @@ sigint_handler() {
 }
 trap sigint_handler SIGINT
 
-shim_url="https://dl.darkn.bio/api/raw/?path=/SH1mmer/$board.zip"
+shim_url="https://dl.darkn.bio/api/raw/?path=/SH1mmer/$board.bin"
 boards_url="https://chromiumdash.appspot.com/cros/fetch_serving_builds?deviceCategory=ChromeOS"
 
 data_dir="$(realpath -m "$data_dir")"
 
 shim_bin="$data_dir/shim_$board.bin"
-shim_zip="$data_dir/shim_$board.zip"
 mkdir -p "$data_dir"
 
-download_and_unzip() {
+download_bin() {
   local url="$1"
-  local zip_path="$2"
-  local bin_path="$3"
+  local bin_path="$2"
   if [ ! -f "$bin_path" ]; then
     if [ ! "$quiet" ]; then
-      wget -q --show-progress $url -O $zip_path -c
+      wget -q --show-progress "$url" -O "$bin_path" -c
     else
-      wget -q $url -O $zip_path -c
+      wget -q "$url" -O "$bin_path" -c
     fi
-  fi
-
-  if [ ! -f "$bin_path" ]; then
-    cleanup_path="$bin_path"
-    print_info "extracting $zip_path"
-    local total_bytes="$(unzip -lq $zip_path | tail -1 | xargs | cut -d' ' -f1)"
-    if [ ! "$quiet" ]; then
-      unzip -p $zip_path | pv -s $total_bytes > $bin_path
-    else
-      unzip -p $zip_path > $bin_path
-    fi
-    rm -rf $zip_path
-    cleanup_path=""
   fi
 }
 
