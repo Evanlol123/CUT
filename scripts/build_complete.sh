@@ -147,6 +147,7 @@ print_title "building final disk image"
 final_image="$data_dir/CUT-$board.bin"
 rm -rf $final_image
 echo $rootfs_dir
+chmod +x ./build.sh
 retry_cmd ./build.sh $final_image $shim_bin $rootfs_dir "quiet=$quiet" "arch=$arch" 
 print_info "build complete! the final disk image is located at $final_image"
 
