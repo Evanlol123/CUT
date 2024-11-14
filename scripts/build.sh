@@ -32,8 +32,8 @@ rm -rf $initramfs_dir $kernel_img
 extract_initramfs_full $shim_path $kernel_img "$arch"
 
 print_info "creating disk image"
-#create a 35mb bootloader partition
-create_image $output_path 35 
+#create a 60mb bootloader partition
+create_image $output_path 60 
 
 print_info "creating loop device for the image"
 image_loop=$(create_loop ${output_path})
