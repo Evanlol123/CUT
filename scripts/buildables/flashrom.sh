@@ -1,9 +1,11 @@
 #!/bin/env bash
 # Edited from source: https://github.com/MercuryWorkshop/sh1mmer/blob/beautifulworld/wax/lib/buildables/flashrom/build.sh 
+
 if [ -f "${2}/flashrom-repo/flashrom" ]; then
 	cp "${2}/flashrom-repo/flashrom" "${1}/usr/bin"
 	exit
 fi
+
 og_pwd=$PWD
 cd $2
 
@@ -47,12 +49,13 @@ fi
 
 make install-lib DESTDIR="$LIBDIR" PREFIX=
 
-
 if ! [ -d "${2}/flashrom-repo" ]; then
 	git clone -n https://chromium.googlesource.com/chromiumos/third_party/flashrom "${2}/flashrom-repo"
 	cd "${2}/flashrom-repo"
 	git checkout 24513f43e17a29731b13bfe7b2f46969c45b25e0
 	git apply $og_pwd/buildables/patches/flashrom.patch
+
+	sed -i 's/memcpy(dest, src, length);/if (src \&\& dest) memcpy(dest, src, length);/' cros_ec.c
 else
 	cd "${2}/flashrom-repo"
 	rm -rf build
@@ -61,11 +64,7 @@ fi
 
 export PKG_CONFIG_PATH="$LIBDIR/lib/pkgconfig"
 
-# fuck this shit, i hate meson
-#export LIBRARY_PATH="$LIBDIR/lib"
-#meson setup -Dbuildtype=release -Dprefer_static=true -Dtests=disabled -Ddefault_programmer_name=internal -Dwerror=false -Dc_args="-I$LIBDIR/include" -Dc_link_args="-static -lcap -lz" "$CROSSFILE" build
-#ninja -C build flashrom
-#"$STRIP" -s build/flashrom
-echo $PWD
-make strip CONFIG_STATIC=yes CONFIG_DEFAULT_PROGRAMMER_NAME=internal CFLAGS="-I$LIBDIR/include" LDFLAGS="-L$LIBDIR/lib" EXTRA_LIBS="-lz"
+make strip CONFIG_STATIC=yes CONFIG_DEFAULT_PROGRAMMER_NAME=internal \
+	CFLAGS="-I$LIBDIR/include" LDFLAGS="-L$LIBDIR/lib" EXTRA_LIBS="-lz"
+
 cp flashrom "${1}/usr/bin"
