@@ -1,5 +1,6 @@
 #!/bin/env bash
-# Edited from source: https://github.com/MercuryWorkshop/sh1mmer/blob/beautifulworld/wax/lib/buildables/flashrom/build.sh 
+# Updated flashrom.sh script to fix memcpy issue and build successfully
+# Original source: https://github.com/MercuryWorkshop/sh1mmer/blob/beautifulworld/wax/lib/buildables/flashrom/build.sh 
 
 if [ -f "${2}/flashrom-repo/flashrom" ]; then
 	cp "${2}/flashrom-repo/flashrom" "${1}/usr/bin"
@@ -54,8 +55,6 @@ if ! [ -d "${2}/flashrom-repo" ]; then
 	cd "${2}/flashrom-repo"
 	git checkout 24513f43e17a29731b13bfe7b2f46969c45b25e0
 	git apply $og_pwd/buildables/patches/flashrom.patch
-
-	sed -i 's/memcpy(dest, src, length);/if (src \&\& dest) memcpy(dest, src, length);/' cros_ec.c
 else
 	cd "${2}/flashrom-repo"
 	rm -rf build
@@ -64,7 +63,10 @@ fi
 
 export PKG_CONFIG_PATH="$LIBDIR/lib/pkgconfig"
 
+sed -i 's/memcpy(/if (src != NULL && dest != NULL) memcpy(/g' cros_ec.c
+
 make strip CONFIG_STATIC=yes CONFIG_DEFAULT_PROGRAMMER_NAME=internal \
-	CFLAGS="-I$LIBDIR/include" LDFLAGS="-L$LIBDIR/lib" EXTRA_LIBS="-lz"
+    CFLAGS="-I$LIBDIR/include -Wno-nonnull" \
+    LDFLAGS="-L$LIBDIR/lib" EXTRA_LIBS="-lz"
 
 cp flashrom "${1}/usr/bin"
