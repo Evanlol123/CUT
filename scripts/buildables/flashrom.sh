@@ -1,6 +1,6 @@
 #!/bin/env bash
-# Updated flashrom.sh script to fix memcpy issue and build successfully
-# Original source: https://github.com/MercuryWorkshop/sh1mmer/blob/beautifulworld/wax/lib/buildables/flashrom/build.sh 
+# Updated build script for flashrom
+# Handles null argument warnings in memcpy during build
 
 if [ -f "${2}/flashrom-repo/flashrom" ]; then
 	cp "${2}/flashrom-repo/flashrom" "${1}/usr/bin"
@@ -63,10 +63,14 @@ fi
 
 export PKG_CONFIG_PATH="$LIBDIR/lib/pkgconfig"
 
-sed -i 's/memcpy(/if (src != NULL && dest != NULL) memcpy(/g' cros_ec.c
+# Patch cros_ec.c to handle null arguments in memcpy
+sed -i 's/memcpy(/if (__src != NULL) memcpy(/g' cros_ec.c
 
-make strip CONFIG_STATIC=yes CONFIG_DEFAULT_PROGRAMMER_NAME=internal \
-    CFLAGS="-I$LIBDIR/include -Wno-nonnull" \
-    LDFLAGS="-L$LIBDIR/lib" EXTRA_LIBS="-lz"
+make strip CONFIG_STATIC=yes CONFIG_DEFAULT_PROGRAMMER_NAME=internal CFLAGS="-I$LIBDIR/include -Wno-nonnull" LDFLAGS="-L$LIBDIR/lib" EXTRA_LIBS="-lz"
 
-cp flashrom "${1}/usr/bin"
+if [ -f "flashrom" ]; then
+	cp flashrom "${1}/usr/bin"
+else
+	echo "Error: flashrom binary not built."
+	exit 1
+fi
