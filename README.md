@@ -36,9 +36,9 @@ The following payloads are planned for initial release; PRs are welcome, but it 
 CUT uses modified versions of the [Shimboot](https://github.com/ading2210/shimboot) build scripts, and as such building is similar.
 You need to be on Linux (debian based) or WSL2.
 
-```
+```bash
 git clone https://github.com/Censura-Exploits/CUT/
-cd CUT/scripts```
+cd CUT/scripts
 sudo bash build_complete.sh <board>
 ```
 Replace `<board>` with the name of your board. You can find it at chrome://version
@@ -61,7 +61,7 @@ ambassador, banon, brask, brya, clapper, coral, corsola, cyan, dedede, edgar, el
 **kukui** • Old kernel issue. The reason why the screen is black though is because the older kernel doesn't support the device's panel, hence a black screen
 
 
-## Todo
+## To do
 1. Add docs so you can access while inside CUT
 2. Add the rest of the docs on the website
 3. Add cryptosmite renrollment when writable finally shows how to use it
