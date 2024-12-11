@@ -37,8 +37,8 @@ CUT uses modified versions of the [Shimboot](https://github.com/ading2210/shimbo
 tldr To build a complete image, use `doas ./build_complete.sh <board>` from inside the `scripts` directory
 Required dependencies: ninja, meson, clang ++
 ### Steps
-1. Clone this repo using `git clone https://github.com/Censura-Exploits/CUT/`
-2. cd into the scripts folder `cd CUT/scripts`
+1. Clone this repo using ```git clone https://github.com/Censura-Exploits/CUT/```
+2. cd into the scripts folder ```cd CUT/scripts```
 3. ```sudo bash build_complete.sh <board>``` replace <board> with the name of your board
 
 ## Todo
