@@ -1,6 +1,5 @@
 #!/bin/env bash
-# Updated build script for flashrom
-# Handles null argument warnings in memcpy during build
+# Edited from source: https://github.com/MercuryWorkshop/sh1mmer/blob/beautifulworld/wax/lib/buildables/flashrom/build.sh
 
 if [ -f "${2}/flashrom-repo/flashrom" ]; then
 	cp "${2}/flashrom-repo/flashrom" "${1}/usr/bin"
@@ -8,7 +7,7 @@ if [ -f "${2}/flashrom-repo/flashrom" ]; then
 fi
 
 og_pwd=$PWD
-cd $2
+cd "$2"
 
 CROSS=
 STRIP=strip
@@ -54,19 +53,57 @@ if ! [ -d "${2}/flashrom-repo" ]; then
 	git clone -n https://chromium.googlesource.com/chromiumos/third_party/flashrom "${2}/flashrom-repo"
 	cd "${2}/flashrom-repo"
 	git checkout 24513f43e17a29731b13bfe7b2f46969c45b25e0
-	git apply $og_pwd/buildables/patches/flashrom.patch
 else
 	cd "${2}/flashrom-repo"
 	rm -rf build
 	make clean
 fi
 
+# fix memcpy null warnings
+patch -p1 <<'EOF'
+--- a/cros_ec.c
++++ b/cros_ec.c
+@@ -227,7 +227,7 @@
+ {
+ 	struct cros_ec_command *s_cmd = cmd;
+ 
+-	memcpy(s_cmd->data, outdata, outsize);
++	if (outdata) memcpy(s_cmd->data, outdata, outsize);
+ 
+ 	return 0;
+ }
+@@ -763,7 +763,7 @@
+ 	{
+ 		int offset = 0;
+ 		while (count > 0) {
+-			memcpy(readarr + offset, buf, count);
++			if (buf) memcpy(readarr + offset, buf, count);
+ 			offset += count;
+ 		}
+ 	}
+@@ -928,7 +928,7 @@
+ 		return -1;
+ 
+ 	/* Write packet header */
+-	memcpy(packet, &p, sizeof(p));
++	if (&p) memcpy(packet, &p, sizeof(p));
+ 
+ 	return 0;
+ }
+@@ -1081,7 +1081,7 @@
+ 		return -1;
+ 
+ 	/* Read chip info */
+-	memcpy(chip_vendor, chip_info.vendor, sizeof(chip_vendor));
++	if (chip_info.vendor) memcpy(chip_vendor, chip_info.vendor, sizeof(chip_vendor));
+ 
+ 	return 0;
+ }
+EOF
+
 export PKG_CONFIG_PATH="$LIBDIR/lib/pkgconfig"
 
-# Patch cros_ec.c to handle null arguments in memcpy
-sed -i 's/memcpy(/if (__src != NULL) memcpy(/g' cros_ec.c
-
-make strip CONFIG_STATIC=yes CONFIG_DEFAULT_PROGRAMMER_NAME=internal CFLAGS="-I$LIBDIR/include -Wno-nonnull" LDFLAGS="-L$LIBDIR/lib" EXTRA_LIBS="-lz"
+make strip CONFIG_STATIC=yes CONFIG_DEFAULT_PROGRAMMER_NAME=internal CFLAGS="-I$LIBDIR/include" LDFLAGS="-L$LIBDIR/lib" EXTRA_LIBS="-lz"
 
 if [ -f "flashrom" ]; then
 	cp flashrom "${1}/usr/bin"
