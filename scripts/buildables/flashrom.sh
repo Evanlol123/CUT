@@ -1,9 +1,14 @@
 #!/bin/env bash
-# Edited from source: https://github.com/MercuryWorkshop/sh1mmer/blob/beautifulworld/wax/lib/buildables/flashrom/build.sh 
+# Adapted and fixed using the working build script
+# Original source: https://github.com/MercuryWorkshop/sh1mmer/blob/beautifulworld/wax/lib/buildables/flashrom/build.sh
+
+set -e
+
 if [ -f "${2}/flashrom-repo/flashrom" ]; then
 	cp "${2}/flashrom-repo/flashrom" "${1}/usr/bin"
 	exit
 fi
+
 og_pwd=$PWD
 cd $2
 
@@ -21,7 +26,6 @@ if [ -z "$3" ]; then
 	echo "ar = '${1}-ar'"
 	echo "strip = '${1}-strip'"
 	echo "pkgconfig = '${1}-pkg-config'"
-	echo "pkg-config = '${1}-pkg-config'"
 	echo ""
 	echo "[host_machine]"
 	echo "system = '$(echo "$1" | cut -d- -f2)'"
@@ -36,6 +40,7 @@ rm -rf lib
 mkdir lib
 LIBDIR="$(realpath lib)"
 
+# Build pciutils
 if ! [ -d "${2}/pciutils" ]; then
 	git clone https://github.com/pciutils/pciutils "${2}/pciutils"
 	cd "${2}/pciutils"
@@ -45,14 +50,37 @@ else
 	make clean
 fi
 
-make install-lib DESTDIR="$LIBDIR" PREFIX=
+if [ -z "$1" ]; then
+	make install-lib DESTDIR="$LIBDIR" PREFIX=
+else
+	make install-lib DESTDIR="$LIBDIR" PREFIX= CROSS_COMPILE="$1"- HOST="$1"
+fi
+cd ..
 
+# Build systemd to get libudev.a
+if ! [ -d "${2}/systemd" ]; then
+	git clone -n https://github.com/systemd/systemd "${2}/systemd"
+	cd "${2}/systemd"
+	git checkout v255
+else
+	cd "${2}/systemd"
+	rm -rf build
+fi
 
+meson setup -Dbuildtype=release -Dstatic-libudev=true -Dprefix=/ -Dc_args="-Wno-error=format-overflow" "$CROSSFILE" build
+ninja -C build libudev.a devel
+cp build/libudev.a "$LIBDIR/lib"
+mkdir -p "$LIBDIR/lib/pkgconfig"
+cp build/src/libudev/libudev.pc "$LIBDIR/lib/pkgconfig"
+[ ! -f "$CROSSFILE" ] || rm "$CROSSFILE"
+cd ..
+
+# Build flashrom
 if ! [ -d "${2}/flashrom-repo" ]; then
 	git clone -n https://chromium.googlesource.com/chromiumos/third_party/flashrom "${2}/flashrom-repo"
 	cd "${2}/flashrom-repo"
 	git checkout 24513f43e17a29731b13bfe7b2f46969c45b25e0
-	git apply $og_pwd/buildables/patches/flashrom.patch
+	git apply "$og_pwd/buildables/patches/flashrom.patch"
 else
 	cd "${2}/flashrom-repo"
 	rm -rf build
@@ -61,11 +89,8 @@ fi
 
 export PKG_CONFIG_PATH="$LIBDIR/lib/pkgconfig"
 
-# fuck this shit, i hate meson
-#export LIBRARY_PATH="$LIBDIR/lib"
-#meson setup -Dbuildtype=release -Dprefer_static=true -Dtests=disabled -Ddefault_programmer_name=internal -Dwerror=false -Dc_args="-I$LIBDIR/include" -Dc_link_args="-static -lcap -lz" "$CROSSFILE" build
-#ninja -C build flashrom
-#"$STRIP" -s build/flashrom
-echo $PWD
-make strip CONFIG_STATIC=yes CONFIG_DEFAULT_PROGRAMMER_NAME=internal CFLAGS="-I$LIBDIR/include" LDFLAGS="-L$LIBDIR/lib" EXTRA_LIBS="-lz"
+make strip CONFIG_STATIC=yes CONFIG_DEFAULT_PROGRAMMER_NAME=internal \
+  CFLAGS="-I$LIBDIR/include" \
+  LDFLAGS="-L$LIBDIR/lib" \
+  EXTRA_LIBS="-lcap -lz" "${CROSS[@]:-}"
 cp flashrom "${1}/usr/bin"
