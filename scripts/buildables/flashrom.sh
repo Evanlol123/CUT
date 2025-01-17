@@ -55,7 +55,7 @@ if ! [ -d "${2}/flashrom-repo" ]; then
 	git apply $og_pwd/buildables/patches/flashrom.patch
 else
 	cd "${2}/flashrom-repo"
-	rm -rf build
+	#rm -rf build
 	make clean
 fi
 
@@ -67,5 +67,5 @@ export PKG_CONFIG_PATH="$LIBDIR/lib/pkgconfig"
 #ninja -C build flashrom
 #"$STRIP" -s build/flashrom
 echo $PWD
-make strip CONFIG_STATIC=yes CONFIG_DEFAULT_PROGRAMMER_NAME=internal CFLAGS="-I$LIBDIR/include" LDFLAGS="-L$LIBDIR/lib" EXTRA_LIBS="-lz"
+make strip CONFIG_STATIC=yes CONFIG_DEFAULT_PROGRAMMER_NAME=internal CFLAGS="-I$LIBDIR/include" LDFLAGS="-L$LIBDIR/lib" EXTRA_LIBS="-lcap -lz" "${CROSS[@]:-ASDFGHJKLQWER=stfu}"
 cp flashrom "${1}/usr/bin"
