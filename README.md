@@ -1,6 +1,6 @@
 # CUT 
 #### ChromeOS Unenrollment Toolkit
-An Alpine-based miniroot system designed to run ChromeOS exploits, utilizing the RMA shim rootfs verification exploit.
+An Alpine-based miniroot system designed to run ChromeOS exploits, utilizing the RMA shim rootfs verification exploit. Used to be part of symlink then worked on by Censura and now a part of Phantom Network to maintain it.
 
 ## Features
 - Minimal rootfs - 25mb rootfs, compared to SH1MMER's 200mb, making it load much faster on slow USB drives.
@@ -82,3 +82,4 @@ ambassador, banon, brask, brya, clapper, coral, corsola, cyan, dedede, edgar, el
 10. Kate Ward - shflags
 11. ChromiumOS project - Flashrom project and VBOOT utilities
 12. Survivor - Making CUT work and updating it after symlink left the community
+13. dyamuh - Working with Survivor to update CUT after symlink left the project. Survivor & dyamuh joined Censura to maintain this project.
